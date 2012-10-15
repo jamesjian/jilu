@@ -27,7 +27,7 @@ define('SESSION_LIEFTIME', 1200); //used by session class
 
 define('BR', '<br />');
 define('LOG_FILE', PHP_ROOT . 'test/my_log.php');
-define('MAXIMUM_ROWS', 999999);
+define('MAXIMUM_ROWS', 999998);
 
 
 
