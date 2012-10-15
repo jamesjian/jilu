@@ -2,3 +2,4 @@
 module[] = 'front';
 module[] = 'mem';
 module[] = 'admin';
+module[] = 'error';

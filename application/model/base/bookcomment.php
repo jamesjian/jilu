@@ -50,9 +50,11 @@ class Bookcomment {
      * @return 1D array or boolean when false 
      */
     public static function get_one($id) {
-            $sql = "SELECT bc.*, b.name as book_name
+            $sql = "SELECT bc.*, b.name as book_name, u.name as user_name, s.name as staff_name
             FROM book_comment bc
             LEFT JOIN book b ON bc.book_id=b.id
+            LEFT JOIN user u ON bc.user_id=u.id
+            LEFT JOIN staff s ON bc.staff_id=s.id
             WHERE bc.id=:id
         ";
             $params = array(':id' => $id);
@@ -64,18 +66,22 @@ class Bookcomment {
      * @return 1D array or boolean when false 
      */
     public static function get_one_by_where($where) {
-        $sql = "SELECT bc.*, b.name as book_name
+        $sql = "SELECT bc.*, b.name as book_name, u.name as user_name, s.name as staff_name
             FROM book_comment bc
             LEFT JOIN book b ON bc.book_id=b.id
+            LEFT JOIN user u ON bc.user_id=u.id
+            LEFT JOIN staff s ON bc.staff_id=s.id
             WHERE $where
         ";
         return Mysql::select_one($sql);
     }
 
     public static function get_all($where = '1', $offset = 0, $row_count = MAXIMUM_ROWS, $order_by = 'name', $direction = 'DESC') {
-        $sql = "SELECT bc.*, b.name as book_name
+        $sql = "SELECT bc.*, b.name as book_name, u.name as user_name, s.name as staff_name
             FROM book_comment bc
             LEFT JOIN book b ON bc.book_id=b.id
+            LEFT JOIN user u ON bc.user_id=u.id
+            LEFT JOIN staff s ON bc.staff_id=s.id
             WHERE $where
             ORDER BY $order_by $direction
             LIMIT $offset, $row_count

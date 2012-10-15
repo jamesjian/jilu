@@ -5,21 +5,23 @@ namespace App\Model\Base;
 use \Zx\Model\Mysql;
 
 /*
-
-create table chapter_comment (id int(11) auto_increment primary key, chapter_id int(11) default 0,
-user_id int(11), 
-staff_id int(11) default 0 comment 'if a staff update an existing comment, record the staff id', 
-title varchar(255) default '', 
-content text,image varchar(255) default '',
-parent_id int(11) default 0 comment 'if parent id is 0, means it's new comment, not reply an existing comment',
-date_created datetime, status tinyint(1))engine=innodb character set=utf8;
+ *an author is a user, author must have a book, when user create a book, it becomes an author
+ * if the book is deleted, the author becomes normal user
+ * currently, they have same permissions
+create table user (id int(11) auto_increment primary key,
+name varchar(100) default '', password varchar(32) default '',
+region_id int(11), keyword varchar(255) default '', image varchar(255) default '',
+date_created datetime, 
+is_author tinyint(1) default 0 comment '0: normal user, 1: author'
+status tinyint(1) default 1 comment '0:register, 1: enabled, 2: disabled by admin'
+)engine=innodb character set=utf8;
  */
 
-class Chaptercomment {
+class User {
 
-    public static $fields = array('id', 'chapter_id', 'user_id', 'staff_id',
-        'title', 'content', 'parent_id', 'date_created','status');
-    public static $table = 'chapter_comment';
+    public static $fields = array('id', 'name', 'password', 'region_id',
+        'keyword', 'image', 'date_created','is_author', 'status');
+    public static $table = 'user';
 
     /**
      *
@@ -27,12 +29,10 @@ class Chaptercomment {
      * @return 1D array or boolean when false 
      */
     public static function get_one($id) {
-            $sql = "SELECT cc.*, c.name as chapter_name, u.name as user_name, s.name as staff_name
-            FROM chapter_comment cc
-            LEFT JOIN chapter c ON cc.book_id=c.id
-            LEFT JOIN user u ON cc.user_id=u.id
-            LEFT JOIN staff s ON cc.staff_id=s.id
-            WHERE cc.id=:id
+            $sql = "SELECT a.*, r.name as region_name
+            FROM author a
+            LEFT JOIN region r ON a.region_id=r.id
+            WHERE a.id=:id
         ";
             $params = array(':id' => $id);
             return Mysql::select_one($sql, $params);
@@ -43,22 +43,18 @@ class Chaptercomment {
      * @return 1D array or boolean when false 
      */
     public static function get_one_by_where($where) {
-        $sql = "SELECT cc.*, c.name as chapter_name, u.name as user_name, s.name as staff_name
-            FROM chapter_comment cc
-            LEFT JOIN chapter c ON cc.book_id=c.id
-            LEFT JOIN user u ON cc.user_id=u.id
-            LEFT JOIN staff s ON cc.staff_id=s.id
+        $sql = "SELECT a.*, r.name as region_name
+            FROM author a
+            LEFT JOIN region r ON a.region_id=r.id
             WHERE $where
         ";
         return Mysql::select_one($sql);
     }
 
     public static function get_all($where = '1', $offset = 0, $row_count = MAXIMUM_ROWS, $order_by = 'name', $direction = 'DESC') {
-        $sql = "SELECT cc.*, c.name as chapter_name, u.name as user_name, s.name as staff_name
-            FROM chapter_comment cc
-            LEFT JOIN chapter c ON cc.book_id=c.id
-            LEFT JOIN user u ON cc.user_id=u.id
-            LEFT JOIN staff s ON cc.staff_id=s.id
+        $sql = "SELECT a.*, r.name as region_name
+            FROM author a
+            LEFT JOIN region r ON a.region_id=r.id
             WHERE $where
             ORDER BY $order_by $direction
             LIMIT $offset, $row_count
@@ -68,7 +64,10 @@ class Chaptercomment {
     }
 
     public static function get_num($where = '1') {
-        $sql =  'SELECT COUNT(id) AS num FROM ' . self::$table . " WHERE $where";
+        $sql = "SELECT COUNT(id) AS num
+            FROM author 
+            WHERE $where
+        ";
         $result = Mysql::select_one($sql);
         if ($result) {
             return $result['num'];
@@ -107,7 +106,7 @@ class Chaptercomment {
     }
 
     public static function delete($id) {
-            $sql = 'DELETE FROM ' . self::$table . ' WHERE id=:id';
+            $sql = "DELETE FROM author WHERE id=:id";
             $params = array(':id' => $id);
             return Mysql::exec($sql, $params);
     }

@@ -37,9 +37,9 @@ class Book {
      * @return 1D array or boolean when false 
      */
     public static function get_one($id) {
-            $sql = "SELECT b.*, a.name as author_name, b.name as character_region_name
+            $sql = "SELECT b.*, u.name as author_name, b.name as character_region_name
             FROM book b
-            LEFT JOIN author a ON b.author_id=b.id
+            LEFT JOIN user u ON b.author_id=u.id
             LEFT JOIN region r ON b.character_region_id=r.id
             WHERE a.id=:id
         ";

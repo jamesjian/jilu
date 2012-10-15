@@ -3,7 +3,9 @@
 namespace App\Model\Base;
 
 use \Zx\Model\Mysql;
-/*
+/*.
+ * 
+ * id=0 is for other tables such as comment tables to left join 
 CREATE TABLE staff (name varchar(255) PRIMARY KEY,
 password varchar(32) NOT NULL DEFAULT '',
 group_id int(11) NOT NULL DEFAULT 1
