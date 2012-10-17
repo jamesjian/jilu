@@ -26,28 +26,28 @@ class Section extends Front {
     }
 
     /*     * one section
-     * /front/section/content/niba
-     * use url rather than id in the query string
+     * /front/section/content/id
      */
 
     public function content() {
-        $section_url = $this->params[0]; //it's url rather than an id
-
-        $section = Model_Section::get_one_by_url($section_url);
+        $section_id = $this->params[0];
+        $section = Model_Section::get_one($section_id);
         //\Zx\Test\Test::object_log('$section', $section, __FILE__, __LINE__, __CLASS__, __METHOD__);
         if ($section) {
-            $section_id = $section['id'];
             Transaction_Html::set_title($section['title']);
             Transaction_Html::set_keyword($section['keyword'] . ',' . $section['keyword_en']);
             Transaction_Html::set_description($section['title']);
-            Model_Section::increase_rank($section_id);
-
+            Model_Chapter::increase_rank($section_id);
+            $chapter = Model_Chapter::get_one($section['chapter_id']);
+            $book = Model_Book::get_one($chapter['book_id']);
             View::set_view_file($this->view_path . 'one_section.php');
-            $relate_sections = Model_Section::get_10_active_related_sections($section_id);
             View::set_action_var('section', $section);
-            View::set_action_var('related_sections', $relate_sections);
+            View::set_action_var('chapter', $chapter);
+            View::set_action_var('previous_section', $previous_section);
+            View::set_action_var('next_section', $next_section);            
+            View::set_action_var('book', $book);
         } else {
-            //if no section, goto homepage
+            //if no chapter, goto homepage
             Transaction_Html::goto_home_page();
         }
     }

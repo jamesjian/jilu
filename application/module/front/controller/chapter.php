@@ -26,26 +26,24 @@ class Chapter extends Front {
     }
 
     /*     * one chapter
-     * /front/chapter/content/niba
-     * use url rather than id in the query string
+     * /front/chapter/content/id
      */
 
     public function content() {
-        $chapter_url = $this->params[0]; //it's url rather than an id
-
-        $chapter = Model_Chapter::get_one_by_url($chapter_url);
+        $chapter_id = $this->params[0];
+        $chapter = Model_Chapter::get_one($chapter_id);
         //\Zx\Test\Test::object_log('$chapter', $chapter, __FILE__, __LINE__, __CLASS__, __METHOD__);
         if ($chapter) {
-            $chapter_id = $chapter['id'];
             Transaction_Html::set_title($chapter['title']);
             Transaction_Html::set_keyword($chapter['keyword'] . ',' . $chapter['keyword_en']);
             Transaction_Html::set_description($chapter['title']);
             Model_Chapter::increase_rank($chapter_id);
-
+            $book = Model_Book::get_one($chapter['book_id']);
             View::set_view_file($this->view_path . 'one_chapter.php');
-            $relate_chapters = Model_Chapter::get_10_active_related_chapters($chapter_id);
             View::set_action_var('chapter', $chapter);
-            View::set_action_var('related_chapters', $relate_chapters);
+            View::set_action_var('previous_chapter', $previous_chapter);
+            View::set_action_var('next_chapter', $next_chapter);
+            View::set_action_var('book', $book);
         } else {
             //if no chapter, goto homepage
             Transaction_Html::goto_home_page();

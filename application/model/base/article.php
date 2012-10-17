@@ -32,8 +32,6 @@ class Article {
             WHERE b.id=:id
         ";
         $params = array(':id' => $id);
-
-
         return Mysql::select_one($sql, $params);
     }
 
@@ -110,7 +108,7 @@ class Article {
     }
 
     public static function delete($id) {
-        $sql = "Delete FROM article WHERE id=:id";
+        $sql = "Delete FROM " . self::$table ." WHERE id=:id";
         $params = array(':id' => $id);
         return Mysql::exec($sql, $params);
     }

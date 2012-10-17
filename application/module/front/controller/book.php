@@ -26,26 +26,21 @@ class Book extends Front {
     }
 
     /*     * one book
-     * /front/book/content/niba
-     * use url rather than id in the query string
+     * /front/book/content/id
      */
 
     public function content() {
-        $book_url = $this->params[0]; //it's url rather than an id
-
-        $book = Model_Book::get_one_by_url($book_url);
+        $book_id = $this->params[0];
+        $book = Model_Book::get_one($book_id);
         //\Zx\Test\Test::object_log('$book', $book, __FILE__, __LINE__, __CLASS__, __METHOD__);
         if ($book) {
-            $book_id = $book['id'];
             Transaction_Html::set_title($book['title']);
             Transaction_Html::set_keyword($book['keyword'] . ',' . $book['keyword_en']);
             Transaction_Html::set_description($book['title']);
             Model_Book::increase_rank($book_id);
 
             View::set_view_file($this->view_path . 'one_book.php');
-            $relate_books = Model_Book::get_10_active_related_books($book_id);
             View::set_action_var('book', $book);
-            View::set_action_var('related_books', $relate_books);
         } else {
             //if no book, goto homepage
             Transaction_Html::goto_home_page();
