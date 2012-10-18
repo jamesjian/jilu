@@ -4,16 +4,38 @@ namespace App\Transaction;
 use \Zx\Controller\Route;
 
 class Session {
+    /**
+     * for front end
+     */
 	public static function remember_current_page()
 	{
 		$_SESSION['current_page'] = Route::get_url();
 	}
 	/**
+         * for front end
 		if has current page in SESSION, return it, otherwise return false
 	*/
 	public static function get_previous_page(){
 	if (isset($_SESSION['current_page'])) {
 		return $_SESSION['current_page'];
+		} else {
+		return false;
+		}
+	}
+    /**
+     * for front end
+     */
+	public static function remember_current_mem_page()
+	{
+		$_SESSION['current_mem_page'] = Route::get_url();
+	}
+	/**
+         * for front end
+		if has current page in SESSION, return it, otherwise return false
+	*/
+	public static function get_previous_mem_page(){
+	if (isset($_SESSION['current_mem_page'])) {
+		return $_SESSION['current_mem_page'];
 		} else {
 		return false;
 		}

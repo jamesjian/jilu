@@ -460,9 +460,9 @@ class User {
      * @return <integer>  if has user id, return it, otherwise, return 0
      */
     public static function get_user_id() {
-        if (!is_null($arr = Session::instance()->get('user'))) {
-            if (isset($arr['user_id'])) {
-                return intval($arr['user_id']);
+        if (isset($_SESSION['user'])) {
+            if (isset($_SESSION['user']['user_id'])) {
+                return intval($_SESSION['user']['user_id']);
             } else {
                 return 0;
             }
@@ -476,9 +476,9 @@ class User {
      * @return <string>  if has user name, return it, otherwise, return empty string
      */
     public static function get_user_name() {
-        if (!is_null($arr = Session::instance()->get('user'))) {
-            if (isset($arr['user_name'])) {
-                return $arr['user_name'];
+        if (isset($_SESSION['user'])) {
+            if (isset($_SESSION['user']['user_name'])) {
+                return intval($_SESSION['user']['user_name']);
             } else {
                 return '';
             }
@@ -596,8 +596,9 @@ class User {
      * check front end user log in or not
      * @return boolean
      */
-    public static function has_loggedin() {
-        if (!is_null(Session::instance()->get('user'))) {
+    public static function user_has_loggedin()
+    {
+        if (isset($_SESSION['user'])) {
             return true;
         } else {
             return false;

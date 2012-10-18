@@ -11,8 +11,10 @@ define('APPLICATION_PATH', PHP_ROOT . 'application' . DIRECTORY_SEPARATOR);
 
 define('FRONT_VIEW_PATH', APPLICATION_PATH . 'module/front/view' . DIRECTORY_SEPARATOR);
 define('ADMIN_VIEW_PATH', APPLICATION_PATH . 'module/admin/view' . DIRECTORY_SEPARATOR);
+define('MEM_VIEW_PATH', APPLICATION_PATH . 'module/mem/view' . DIRECTORY_SEPARATOR);
 define('FRONT_HTML_ROOT', HTML_ROOT . 'front/');
 define('ADMIN_HTML_ROOT', HTML_ROOT . 'admin/');
+define('MEM_HTML_ROOT', HTML_ROOT . 'mem//');
 
 
 define('PHP_PUBLIC_PATH', PHP_ROOT); //for file upload

@@ -1,16 +1,20 @@
 <?php
 
-defined('SYSPATH') or die('No direct script access.');
+namespace App\Module\Mem\Controller;
+
+use \Zx\Controller\Route;
+use \Zx\View\View;
+use App\Transaction\Html as Transaction_Html;
 
 /**
- * for registered user
- * 2 levels of registered users, A and B, B has more permissions or benefits such as bigger number of threads
- * default one is A, when register a user, its group is A, group id is 3;
- * admin can raise the user to group B, group id is 4.
- * 
-
+ * homepage: /=>/front/article/latest/page/1
+ * latest: /front/article/latest/page/3
+ * most popular:/front/article/most_popular/page/3
+ * article under category: /front/articlecategory/retrieve/$category_id_3/category_name.php
+ * one: /front/article/content/$id/$article_url
+ * keyword: /front/article/keyword/$keyword_3
  */
-class Controller_Mem_User extends Controller_Mem_Appcontroller {
+class User extends Mem {
 
     public function before() {
         parent::before();
