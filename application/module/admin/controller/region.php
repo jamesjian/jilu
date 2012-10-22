@@ -138,5 +138,84 @@ class Region extends Admin {
         View::set_action_var('current_page', $current_page);
         View::set_action_var('num_of_pages', $num_of_pages);
     }
-    
+    /**
+     * no pagination
+     * no manipucility
+     */
+    public function retrieve_province() {
+        \App\Transaction\Session::remember_current_admin_page();
+        \App\Transaction\Session::set_admin_current_l1_menu('Region');
+        \App\Transaction\Session::set_admin_current_l2_menu('Province');
+        $current_page = isset($this->params[0]) ? intval($this->params[0]) : 1;
+        $order_by = isset($this->params[1]) ? $this->params[1] : 'name';
+        $direction = isset($this->params[2]) ? $this->params[2] : 'ASC';
+        $search = isset($this->params[3]) ? $this->params[3]: '';
+        if ($search != '') {
+            $where = " r.name LIKE '%$search%' OR p.name LIKE '%$search%'";
+        } else {
+            $where = '1';
+        }
+        $region_list = Model_Region::get_provinces($where, $order_by, $direction);
+        $num_of_records = Model_Region::get_num_of_regions($where);
+        $num_of_pages = ceil($num_of_records / NUM_OF_RECORDS_IN_ADMIN_PAGE);
+        //\Zx\Test\Test::object_log('region_list', $region_list, __FILE__, __LINE__, __CLASS__, __METHOD__);
+
+        View::set_view_file($this->view_path . 'retrieve.php');
+        View::set_action_var('region_list', $region_list);
+        View::set_action_var('search', $search);
+        View::set_action_var('order_by', $order_by);
+        View::set_action_var('direction', $direction);
+        View::set_action_var('num_of_pages', $num_of_pages);
+    }
+    /**
+     * go directly to beijing , shanghai, tianjin, chongqing
+     * they are cities which parent is "直辖市"
+     */
+    public function retrieve_manipucility()
+    {
+        
+    }
+    /**
+     * 
+     */
+    public function retrieve_city_by_province_id()
+    {
+        
+    }
+    /**
+     * contain district and county
+     * 
+     */
+    public function retrieve_districts_by_city_id()
+    {
+        
+    }
+    public function retrieve_districts_by_province_id()
+    {
+       \App\Transaction\Session::remember_current_admin_page();
+        \App\Transaction\Session::set_current_l1_menu('Region');
+        $cat_id = isset($this->params[0]) ? intval($this->params[0]) :0;
+        $current_page = isset($this->params[1]) ? intval($this->params[1]) : 1;
+        $order_by = isset($this->params[2]) ? $this->params[2] : 'id';
+        $direction = isset($this->params[3]) ? $this->params[3] : 'ASC';
+        $search = isset($this->params[4]) ? $this->params[4]: '';
+        if ($search != '') {
+            $where = " b.title LIKE '%$search%' OR bc.title LIKE '%$search%'";
+        } else {
+            $where = '1';
+        }
+        $article_list = Model_Article::get_articles_by_cat_id_and_page_num($cat_id, $where, $current_page, $order_by, $direction);
+        $num_of_records = Model_Article::get_num_of_articles($where);
+        $num_of_pages = ceil($num_of_records / NUM_OF_ARTICLES_IN_CAT_PAGE);
+        //\Zx\Test\Test::object_log('article_list', $article_list, __FILE__, __LINE__, __CLASS__, __METHOD__);
+
+        View::set_view_file($this->view_path . 'retrieve_by_cat_id.php');
+        View::set_action_var('cat_id', $cat_id);
+        View::set_action_var('article_list', $article_list);
+        View::set_action_var('search', $search);
+        View::set_action_var('order_by', $order_by);
+        View::set_action_var('direction', $direction);
+        View::set_action_var('current_page', $current_page);
+        View::set_action_var('num_of_pages', $num_of_pages);
+    }
 }

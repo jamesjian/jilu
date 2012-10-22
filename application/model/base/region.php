@@ -7,6 +7,9 @@ use \Zx\Model\Mysql;
 /*
  * id=0 is the root of all regions
  * 
+ * name "直辖市" is a province
+ * it's parent of beijing, shanghai, tianjin, chongqing
+ * 
   create table region(id int(11) auto_increment primary key,
 name varchar(100), 
 type tinyint(1) comment '1: province, 2.municipality , 3. city, 4.district 5.county ',
@@ -114,7 +117,7 @@ class Region {
 
     public static function delete($id) {
         if ($id > 0) {
-            $sql = "Delete FROM region WHERE id=:id";
+            $sql = 'DELETE FROM' . self::$table . ' WHERE id=:id';
             $params = array(':id' => $id);
             return Mysql::exec($sql, $params);
         } else {

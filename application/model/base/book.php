@@ -52,9 +52,9 @@ class Book {
      * @return 1D array or boolean when false 
      */
     public static function get_one_by_where($where) {
-        $sql = "SELECT b.*, a.name as author_name, b.name as character_region_name
+        $sql = "SELECT b.*, u.name as author_name, b.name as character_region_name
             FROM book b
-            LEFT JOIN author a ON b.author_id=b.id
+            LEFT JOIN user u ON b.author_id=u.id
             LEFT JOIN region r ON b.character_region_id=r.id
             WHERE $where
         ";
@@ -62,9 +62,9 @@ class Book {
     }
 
     public static function get_all($where = '1', $offset = 0, $row_count = MAXIMUM_ROWS, $order_by = 'name', $direction = 'DESC') {
-        $sql = "SELECT b.*, a.name as author_name, b.name as character_region_name
+        $sql = "SELECT b.*, u.name as author_name, b.name as character_region_name
             FROM book b
-            LEFT JOIN author a ON b.author_id=b.id
+            LEFT JOIN user u ON b.author_id=u.id
             LEFT JOIN region r ON b.character_region_id=r.id
             WHERE $where
             ORDER BY $order_by $direction
@@ -117,7 +117,7 @@ class Book {
     }
 
     public static function delete($id) {
-            $sql = "DELETE FROM book WHERE id=:id";
+            $sql = 'DELETE FROM' . self::$table . ' WHERE id=:id';
             $params = array(':id' => $id);
             return Mysql::exec($sql, $params);
     }
