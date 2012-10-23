@@ -61,10 +61,7 @@ class Section {
     }
 
     public static function get_num($where = '1') {
-        $sql = "SELECT COUNT(id) AS num
-            FROM section 
-            WHERE $where
-        ";
+        $sql = "SELECT COUNT(id) AS num FROM" . self::$table . "WHERE $where";
         $result = Mysql::select_one($sql);
         if ($result) {
             return $result['num'];
@@ -103,7 +100,7 @@ class Section {
     }
 
     public static function delete($id) {
-            $sql = "DELETE FROM section WHERE id=:id";
+            $sql = "Delete FROM " . self::$table ." WHERE id=:id";
             $params = array(':id' => $id);
             return Mysql::exec($sql, $params);
     }

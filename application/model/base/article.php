@@ -63,10 +63,7 @@ class Article {
     }
 
     public static function get_num($where = '1') {
-        $sql = "SELECT COUNT(id) AS num
-            FROM article 
-            WHERE $where
-        ";
+        $sql = "SELECT COUNT(id) AS num FROM" . self::$table . "WHERE $where";
         $result = Mysql::select_one($sql);
         if ($result) {
             return $result['num'];

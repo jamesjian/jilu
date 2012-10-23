@@ -2,16 +2,15 @@
 
 namespace App\Transaction;
 
-use \App\Model\Section as Model_Article;
+use \App\Model\Section as Model_Section;
 use \Zx\Message\Message;
 
-class Article {
+class Section {
 
     public static function create_section($arr=array())
     {
-        if (count($arr)>0 && isset($arr['title'])) {
-			if (!isset($arr['rank'])) $arr['rank'] = 0; //initialize
-            if (Model_Article::create($arr)) {
+        if (count($arr)>0 && isset($arr['name'])) {
+            if (Model_Section::create($arr)) {
                 Message::set_success_message('success');
                 return true;
             } else {
@@ -28,8 +27,8 @@ class Article {
     {
 		      //\Zx\Test\Test::object_log('arr', $arr, __FILE__, __LINE__, __CLASS__, __METHOD__);
 	
-        if (count($arr)>0 && (isset($arr['title']) || isset($arr['content']))) {
-            if (Model_Article::update($id, $arr)) {
+        if (count($arr)>0 && (isset($arr['name']) || isset($arr['content']))) {
+            if (Model_Section::update($id, $arr)) {
                 Message::set_success_message('success');
                 return true;
             } else {
@@ -43,7 +42,7 @@ class Article {
     }
     public static function delete_section($id)
     {
-        if (Model_Article::delete($id)) {
+        if (Model_Section::delete($id)) {
                 Message::set_success_message('success');
                 return true;
             } else {

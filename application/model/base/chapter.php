@@ -5,7 +5,8 @@ namespace App\Model\Base;
 use \Zx\Model\Mysql;
 
 /*
-create table chapter (id int(11) auto_increment primary key, book_id int(11) default 0,
+create table chapter (id int(11) auto_increment primary key, 
+book_id int(11) default 0,
 name varchar(255) default '', keyword varchar(255) default '', 
 abstract text,image varchar(255) default '',
 date_created datetime, 
@@ -61,10 +62,7 @@ class Chapter {
     }
 
     public static function get_num($where = '1') {
-        $sql = "SELECT COUNT(id) AS num
-            FROM chapter 
-            WHERE $where
-        ";
+        $sql = "SELECT COUNT(id) AS num FROM" . self::$table . "WHERE $where";
         $result = Mysql::select_one($sql);
         if ($result) {
             return $result['num'];
@@ -103,7 +101,7 @@ class Chapter {
     }
 
     public static function delete($id) {
-            $sql = "DELETE FROM chapter WHERE id=:id";
+            $sql = "Delete FROM " . self::$table ." WHERE id=:id";
             $params = array(':id' => $id);
             return Mysql::exec($sql, $params);
     }

@@ -12,7 +12,7 @@ class Chapter extends Admin {
     public $list_page = '';
     public function init() {
         $this->view_path = APPLICATION_PATH . 'module/admin/view/chapter/';
-        $this->list_page =  ADMIN_HTML_ROOT . 'chapter/retrieve/1/title/ASC/';
+        $this->list_page =  ADMIN_HTML_ROOT . 'chapter/retrieve/1/name/ASC/';
         \App\Transaction\Session::set_ck_upload_path('chapter');
         parent::init();
     }
@@ -20,28 +20,16 @@ class Chapter extends Admin {
     public function create() {
         $success = false;
         if (isset($_POST['submit'])) {
-            $title = isset($_POST['title']) ? trim($_POST['title']) : '';
-            $title_en = isset($_POST['title_en']) ? trim($_POST['title_en']) : '';
-            $content = isset($_POST['content']) ? trim($_POST['content']) : '';
-            $keyword = isset($_POST['keyword']) ? trim($_POST['keyword']) : '';
-            $keyword_en = isset($_POST['keyword_en']) ? trim($_POST['keyword_en']) : '';
+            $name = isset($_POST['name']) ? trim($_POST['name']) : '';
             $abstract = isset($_POST['abstract']) ? trim($_POST['abstract']) : '';
-            $url = isset($_POST['url']) ? trim($_POST['url']) : '';
-            $cat_id = isset($_POST['cat_id']) ? intval($_POST['cat_id']) : 1;
-            $rank = isset($_POST['rank']) ? intval($_POST['rank']) : 0;
+            $book_id = isset($_POST['book_id']) ? intval($_POST['book_id']) : 1;
             $status = isset($_POST['status']) ? intval($_POST['status']) : 1;
 
-            if ($title <> '') {
-                $arr = array('title' => $title, 
-                     'title_en'=>$title_en, 
-                    'content' => $content, 
-                    'keyword'=>$keyword,
-                    'keyword_en'=>$keyword_en,
-                    'abstract'=>$abstract, 
-                    'url'=>$url, 
-                    'rank'=>$rank,
+            if ($name <> '') {
+                $arr = array('name' => $name, 
+                    'abstract' => $abstract, 
                     'status'=>$status,
-                    'cat_id' => $cat_id);
+                    'book_id' => $book_id);
                 if (Transaction_Chapter::create_chapter($arr)) {
                     $success = true;
                 }
@@ -64,25 +52,13 @@ class Chapter extends Admin {
         $success = false;
         if (isset($_POST['submit']) && isset($_POST['id'])) {
             $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-            \Zx\Test\Test::object_log('id', $id, __FILE__, __LINE__, __CLASS__, __METHOD__);
+            //\Zx\Test\Test::object_log('id', $id, __FILE__, __LINE__, __CLASS__, __METHOD__);
             $arr = array();
             if ($id <> 0) {
-                if (isset($_POST['title']))
-                    $arr['title'] = trim($_POST['title']);
-                if (isset($_POST['title_en']))
-                    $arr['title_en'] = trim($_POST['title_en']);                
-                if (isset($_POST['content']))
-                    $arr['content'] = trim($_POST['content']);
-                if (isset($_POST['keyword']))
-                    $arr['keyword'] = trim($_POST['keyword']);
-                if (isset($_POST['keyword_en']))
-                    $arr['keyword_en'] = trim($_POST['keyword_en']);
+                if (isset($_POST['name']))
+                    $arr['name'] = trim($_POST['name']);
                 if (isset($_POST['abstract']))
-                    $arr['abstract'] = trim($_POST['abstract']);                
-                if (isset($_POST['url']))
-                    $arr['url'] = trim($_POST['url']);                
-                if (isset($_POST['rank']))
-                    $arr['rank'] = intval($_POST['rank']);
+                    $arr['abstract'] = trim($_POST['abstract']);
                 if (isset($_POST['status']))
                     $arr['status'] = intval($_POST['status']);
                 if (Transaction_Chapter::update_chapter($id, $arr)) {
@@ -121,7 +97,7 @@ class Chapter extends Admin {
         $direction = isset($this->params[2]) ? $this->params[2] : 'ASC';
         $search = isset($this->params[3]) ? $this->params[3]: '';
         if ($search != '') {
-            $where = " b.title LIKE '%$search%' OR bc.title LIKE '%$search%'";
+            $where = " c.name LIKE '%$search%' OR b.name LIKE '%$search%'";
         } else {
             $where = '1';
         }
@@ -138,5 +114,31 @@ class Chapter extends Admin {
         View::set_action_var('current_page', $current_page);
         View::set_action_var('num_of_pages', $num_of_pages);
     }
-    
+    public function retrieve_by_book_id() {
+        \App\Transaction\Session::remember_current_admin_page();
+        \App\Transaction\Session::set_current_l1_menu('Chapter');
+        $book_id = isset($this->params[0]) ? intval($this->params[0]) :0;
+        $current_page = isset($this->params[1]) ? intval($this->params[1]) : 1;
+        $order_by = isset($this->params[2]) ? $this->params[2] : 'id';
+        $direction = isset($this->params[3]) ? $this->params[3] : 'ASC';
+        $search = isset($this->params[4]) ? $this->params[4]: '';
+        if ($search != '') {
+            $where = " c.name LIKE '%$search%' OR b.name LIKE '%$search%'";
+        } else {
+            $where = '1';
+        }
+        $chapter_list = Model_Chapter::get_chapters_by_book_id_and_page_num($book_id, $where, $current_page, $order_by, $direction);
+        $num_of_records = Model_Chapter::get_num_of_chapters($where);
+        $num_of_pages = ceil($num_of_records / NUM_OF_ARTICLES_IN_CAT_PAGE);
+        //\Zx\Test\Test::object_log('article_list', $article_list, __FILE__, __LINE__, __CLASS__, __METHOD__);
+
+        View::set_view_file($this->view_path . 'retrieve_by_book_id.php');
+        View::set_action_var('book_id', $book_id);
+        View::set_action_var('chapter_list', $chapter_list);
+        View::set_action_var('search', $search);
+        View::set_action_var('order_by', $order_by);
+        View::set_action_var('direction', $direction);
+        View::set_action_var('current_page', $current_page);
+        View::set_action_var('num_of_pages', $num_of_pages);
+    }    
 }

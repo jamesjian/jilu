@@ -5,7 +5,7 @@ $create_link = ADMIN_HTML_ROOT . 'section/create';
 <a href="<?php echo $create_link;?>">Create</a>
 <?php
 if ($chapter_list) {
-$link_prefix = ADMIN_HTML_ROOT . "section/retrieve/$current_page/";
+$link_prefix = ADMIN_HTML_ROOT . "section/retrieve_by_chapter_id/$chapter_id/$current_page/";
 $next_direction = ($direction == 'ASC') ? 'DESC' : 'ASC';  //change direction
 $link_postfix =  "/$next_direction/$search";
 $link_id = $link_prefix . 'id' . $link_postfix;
@@ -45,7 +45,7 @@ $direction_img = ($direction == 'ASC') ? HTML_ROOT . 'image/icon/up.png' :
 	?>
 	</table>
 <?php
-$link_prefix = ADMIN_HTML_ROOT . 'section/retrieve/';	
+$link_prefix = ADMIN_HTML_ROOT . 'section/retrieve_by_chapter_id/' . $section_id;	
 $link_postfix = "/$order_by/$direction/$search";
 include ADMIN_VIEW_PATH . 'templates/pagination.php';
 } else {

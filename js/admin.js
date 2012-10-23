@@ -153,6 +153,21 @@ admin = {
         $('.delete_page').bind('click', {
             name: 'page'
         }, admin.confirm_delete_template);
+        $('.delete_character').bind('click', {
+            name: 'character'
+        }, admin.confirm_delete_template);        
+        $('.delete_book').bind('click', {
+            name: 'book'
+        }, admin.confirm_delete_template);        
+        $('.delete_chapter').bind('click', {
+            name: 'chapter'
+        }, admin.confirm_delete_template);        
+        $('.delete_section').bind('click', {
+            name: 'section'
+        }, admin.confirm_delete_template);        
+        $('.delete_user').bind('click', {
+            name: 'user'
+        }, admin.confirm_delete_template);        
     },    
     init_change_status_links: function(){
         $('.category_status').bind('change', {
