@@ -16,6 +16,7 @@ if (\App\Transaction\Staff::staff_has_loggedin()) {
         array('menu_name' => 'Page Category', 'link' => 'pagecategory/retrieve'),
         array('menu_name' => 'Region', 'link' => 'region/'),
         array('menu_name' => 'User', 'link' => 'user/retrieve'),
+        array('menu_name' => 'Character', 'link' => 'character/retrieve'),
         array('menu_name' => 'Book', 'link' => 'book/retrieve'),
         array('menu_name' => 'Chapter', 'link' => 'chapter/retrieve'),
         array('menu_name' => 'Section', 'link' => 'section/retrieve',),

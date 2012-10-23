@@ -6,27 +6,23 @@ use \Zx\Model\Mysql;
 
 /*
 #character is the main role in the book, each book has one character, it might be different from the author
-create table book (
+create table character (
 id int(11) auto_increment primary key, 
-author_id int(11) default 0,
-title varchar(255) default '', keywords varchar(255) default '', 
-abstract text, 
 image varchar(255) default '',
-character_id int(11) default 0,
-character_relationship varchar(50) comment 'relationship between author and character',
+name varchar(100) default '',
+birthday char(8) comment 'can be only year like '19690000',
+region_id int(11), keywords varchar(255) default '',
 date_created datetime, 
-status tinyint(1) default 1 comment '0: disable by author, 1: enable by author and admin (default), 2: disable by admin',
-comment_status tinyint(1) default 0 comment '1. enable comment, 0. disable comment'
+status tinyint(1) default 1 comment ''
 )engine=innodb character set=utf8;
  */
 
-class Book {
+class Character {
 
-    public static $fields = array('id', 'author_id', 'title', 'abstract',
-        'image', 'character_id', 'character_relationship', 
-        'date_created', 'status', 'comment_status',
+    public static $fields = array('id', 'image', 'name', 'birthday', 'region_id',
+        'date_created', 'status', 
         );
-    public static $table = 'book';
+    public static $table = 'character';
 
     /**
      *
@@ -34,11 +30,10 @@ class Book {
      * @return 1D array or boolean when false 
      */
     public static function get_one($id) {
-            $sql = "SELECT b.*, u.name as author_name, c.name as character_name
-            FROM book b
-            LEFT JOIN user u ON b.author_id=u.id
-            LEFT JOIN character c ON b.character_id=c.id
-            WHERE b.id=:id
+            $sql = "SELECT c.*, r.name as region_name
+            FROM character c
+            LEFT JOIN region r ON c.region_id=r.id
+            WHERE c.id=:id
         ";
             $params = array(':id' => $id);
             return Mysql::select_one($sql, $params);
@@ -49,20 +44,18 @@ class Book {
      * @return 1D array or boolean when false 
      */
     public static function get_one_by_where($where) {
-        $sql = "SELECT b.*, u.name as author_name, c.name as character_name
-            FROM book b
-            LEFT JOIN user u ON b.author_id=u.id
-            LEFT JOIN character c ON b.character_id=c.id
+        $sql = "SELECT c.*, r.name as region_name
+            FROM character c
+            LEFT JOIN region r ON c.region_id=r.id
             WHERE $where
         ";
         return Mysql::select_one($sql);
     }
 
     public static function get_all($where = '1', $offset = 0, $row_count = MAXIMUM_ROWS, $order_by = 'name', $direction = 'DESC') {
-        $sql = "SELECT b.*, u.name as author_name, c.name as character_name
-            FROM book b
-            LEFT JOIN user u ON b.author_id=u.id
-            LEFT JOIN character c ON b.character_id=c.id
+        $sql = "SELECT c.*, r.name as region_name
+            FROM character c
+            LEFT JOIN region r ON c.region_id=r.id
             WHERE $where
             ORDER BY $order_by $direction
             LIMIT $offset, $row_count
