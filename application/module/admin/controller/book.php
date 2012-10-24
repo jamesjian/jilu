@@ -13,39 +13,40 @@ class Book extends Admin {
 
     public function init() {
         $this->view_path = APPLICATION_PATH . 'module/admin/view/book/';
-        $this->list_page = ADMIN_HTML_ROOT . 'book/retrieve/1/title/ASC/';
+        $this->list_page = ADMIN_HTML_ROOT . 'book/retrieve/1/name/ASC/';
         \App\Transaction\Session::set_ck_upload_path('book');
         parent::init();
     }
-
+    /**
+     * must have author id first
+     */
     public function create() {
         $success = false;
-        if (isset($_POST['submit'])) {
-            $title = isset($_POST['title']) ? trim($_POST['title']) : '';
-            $title_en = isset($_POST['title_en']) ? trim($_POST['title_en']) : '';
-            $content = isset($_POST['content']) ? trim($_POST['content']) : '';
-            $keyword = isset($_POST['keyword']) ? trim($_POST['keyword']) : '';
-            $keyword_en = isset($_POST['keyword_en']) ? trim($_POST['keyword_en']) : '';
+        if (isset($_POST['submit']) && isset($_POST['author_id'])) {
+            $name = isset($_POST['name']) ? trim($_POST['name']) : '';
+            $author_id = isset($_POST['author_id']) ? intval($_POST['author_id']) : 0;
+            $character_id = isset($_POST['character_id']) ? intval($_POST['character_id']) : 0;
+            $character_relationship = isset($_POST['character_relationship']) ? trim($_POST['character_relationship']) : '';
             $abstract = isset($_POST['abstract']) ? trim($_POST['abstract']) : '';
-            $url = isset($_POST['url']) ? trim($_POST['url']) : '';
-            $cat_id = isset($_POST['cat_id']) ? intval($_POST['cat_id']) : 1;
-            $rank = isset($_POST['rank']) ? intval($_POST['rank']) : 0;
             $status = isset($_POST['status']) ? intval($_POST['status']) : 1;
 
-            if ($title <> '') {
-                $arr = array('title' => $title,
-                    'title_en' => $title_en,
-                    'content' => $content,
-                    'keyword' => $keyword,
-                    'keyword_en' => $keyword_en,
+            if ($name <> '' && $author_id <>0) {
+                $arr = array('name' => $name,
                     'abstract' => $abstract,
-                    'url' => $url,
-                    'rank' => $rank,
+                    'author_id'=>$author_id,
+                    'character_id'=>$character_id,
+                    'character_relationship'=>$character_relationship,
                     'status' => $status,
-                    'cat_id' => $cat_id);
+                    );
                 if (Transaction_Book::create_book($arr)) {
                     $success = true;
                 }
+            }
+        } else {
+            $author_id = isset($this->params[0]) ? intval($this->params[0]) : 0;
+            if ($author_id <> 0 && Model_User::exist_by_id($author_id)) {
+                $author = Model_User::get_one($author_id);
+                View::set_action_var('author', $author);
             }
         }
         if ($success) {
@@ -68,22 +69,10 @@ class Book extends Admin {
             \Zx\Test\Test::object_log('id', $id, __FILE__, __LINE__, __CLASS__, __METHOD__);
             $arr = array();
             if ($id <> 0) {
-                if (isset($_POST['title']))
-                    $arr['title'] = trim($_POST['title']);
-                if (isset($_POST['title_en']))
-                    $arr['title_en'] = trim($_POST['title_en']);
-                if (isset($_POST['content']))
-                    $arr['content'] = trim($_POST['content']);
-                if (isset($_POST['keyword']))
-                    $arr['keyword'] = trim($_POST['keyword']);
-                if (isset($_POST['keyword_en']))
-                    $arr['keyword_en'] = trim($_POST['keyword_en']);
+                if (isset($_POST['name']))
+                    $arr['name'] = trim($_POST['name']);
                 if (isset($_POST['abstract']))
                     $arr['abstract'] = trim($_POST['abstract']);
-                if (isset($_POST['url']))
-                    $arr['url'] = trim($_POST['url']);
-                if (isset($_POST['rank']))
-                    $arr['rank'] = intval($_POST['rank']);
                 if (isset($_POST['status']))
                     $arr['status'] = intval($_POST['status']);
                 if (Transaction_Book::update_book($id, $arr)) {

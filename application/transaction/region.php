@@ -435,9 +435,9 @@ class Region {
         }
     }
 
-    public static function change_status($suburb_id, $status) {
+    public static function change_status($region_id, $status) {
         $arr = array('status' => $status);
-        return Model_Region::update_record($suburb_id, $arr);
+        return Model_Region::update($region_id, $arr);
     }
 
     public static function change_is_selected($suburb_id, $is_selected) {

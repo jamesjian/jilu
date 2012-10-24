@@ -20,7 +20,7 @@ class Book extends Mem {
     public function create() {
         $success = false;
         if (isset($_POST['submit'])) {
-            $title = isset($_POST['name']) ? trim($_POST['title']) : '';
+            $name = isset($_POST['name']) ? trim($_POST['name']) : '';
             $abstract = isset($_POST['abstract']) ? trim($_POST['abstract']) : '';
             $character_name = isset($_POST['character_name']) ? trim($_POST['character_name']) : '';
             $character_birthday = isset($_POST['character_birthday']) ? trim($_POST['character_birthday']) : '';

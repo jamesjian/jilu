@@ -10,9 +10,10 @@ use \Zx\Test\Test;
 class Region extends Admin {
 
     public $list_page = '';
+
     public function init() {
         $this->view_path = APPLICATION_PATH . 'module/admin/view/region/';
-        $this->list_page =  ADMIN_HTML_ROOT . 'region/retrieve/1/title/ASC/';
+        $this->list_page = ADMIN_HTML_ROOT . 'region/retrieve/1/title/ASC/';
         \App\Transaction\Session::set_ck_upload_path('region');
         parent::init();
     }
@@ -32,15 +33,15 @@ class Region extends Admin {
             $status = isset($_POST['status']) ? intval($_POST['status']) : 1;
 
             if ($title <> '') {
-                $arr = array('title' => $title, 
-                     'title_en'=>$title_en, 
-                    'content' => $content, 
-                    'keyword'=>$keyword,
-                    'keyword_en'=>$keyword_en,
-                    'abstract'=>$abstract, 
-                    'url'=>$url, 
-                    'rank'=>$rank,
-                    'status'=>$status,
+                $arr = array('title' => $title,
+                    'title_en' => $title_en,
+                    'content' => $content,
+                    'keyword' => $keyword,
+                    'keyword_en' => $keyword_en,
+                    'abstract' => $abstract,
+                    'url' => $url,
+                    'rank' => $rank,
+                    'status' => $status,
                     'cat_id' => $cat_id);
                 if (Transaction_Region::create_region($arr)) {
                     $success = true;
@@ -70,7 +71,7 @@ class Region extends Admin {
                 if (isset($_POST['title']))
                     $arr['title'] = trim($_POST['title']);
                 if (isset($_POST['title_en']))
-                    $arr['title_en'] = trim($_POST['title_en']);                
+                    $arr['title_en'] = trim($_POST['title_en']);
                 if (isset($_POST['content']))
                     $arr['content'] = trim($_POST['content']);
                 if (isset($_POST['keyword']))
@@ -78,9 +79,9 @@ class Region extends Admin {
                 if (isset($_POST['keyword_en']))
                     $arr['keyword_en'] = trim($_POST['keyword_en']);
                 if (isset($_POST['abstract']))
-                    $arr['abstract'] = trim($_POST['abstract']);                
+                    $arr['abstract'] = trim($_POST['abstract']);
                 if (isset($_POST['url']))
-                    $arr['url'] = trim($_POST['url']);                
+                    $arr['url'] = trim($_POST['url']);
                 if (isset($_POST['rank']))
                     $arr['rank'] = intval($_POST['rank']);
                 if (isset($_POST['status']))
@@ -101,6 +102,7 @@ class Region extends Admin {
             View::set_action_var('region', $region);
         }
     }
+
     public function search() {
         if (isset($_POST['search']) && trim($_POST['search']) != '') {
             $link = $this->list_page . trim($_POST['search']);
@@ -109,6 +111,7 @@ class Region extends Admin {
         }
         header('Location: ' . $link);
     }
+
     /**
       /page/orderby/direction/search
      * page, orderby, direction, search can be empty
@@ -119,7 +122,7 @@ class Region extends Admin {
         $current_page = isset($this->params[0]) ? intval($this->params[0]) : 1;
         $order_by = isset($this->params[1]) ? $this->params[1] : 'id';
         $direction = isset($this->params[2]) ? $this->params[2] : 'ASC';
-        $search = isset($this->params[3]) ? $this->params[3]: '';
+        $search = isset($this->params[3]) ? $this->params[3] : '';
         if ($search != '') {
             $where = " b.title LIKE '%$search%' OR bc.title LIKE '%$search%'";
         } else {
@@ -138,6 +141,7 @@ class Region extends Admin {
         View::set_action_var('current_page', $current_page);
         View::set_action_var('num_of_pages', $num_of_pages);
     }
+
     /**
      * no pagination
      * no manipucility
@@ -149,7 +153,7 @@ class Region extends Admin {
         $current_page = isset($this->params[0]) ? intval($this->params[0]) : 1;
         $order_by = isset($this->params[1]) ? $this->params[1] : 'name';
         $direction = isset($this->params[2]) ? $this->params[2] : 'ASC';
-        $search = isset($this->params[3]) ? $this->params[3]: '';
+        $search = isset($this->params[3]) ? $this->params[3] : '';
         if ($search != '') {
             $where = " r.name LIKE '%$search%' OR p.name LIKE '%$search%'";
         } else {
@@ -167,38 +171,38 @@ class Region extends Admin {
         View::set_action_var('direction', $direction);
         View::set_action_var('num_of_pages', $num_of_pages);
     }
+
     /**
      * go directly to beijing , shanghai, tianjin, chongqing
      * they are cities which parent is "直辖市"
      */
-    public function retrieve_manipucility()
-    {
+    public function retrieve_manipucility() {
         
     }
+
     /**
      * 
      */
-    public function retrieve_city_by_province_id()
-    {
+    public function retrieve_city_by_province_id() {
         
     }
+
     /**
      * contain district and county
      * 
      */
-    public function retrieve_districts_by_city_id()
-    {
+    public function retrieve_districts_by_city_id() {
         
     }
-    public function retrieve_districts_by_province_id()
-    {
-       \App\Transaction\Session::remember_current_admin_page();
+
+    public function retrieve_districts_by_province_id() {
+        \App\Transaction\Session::remember_current_admin_page();
         \App\Transaction\Session::set_current_l1_menu('Region');
-        $cat_id = isset($this->params[0]) ? intval($this->params[0]) :0;
+        $cat_id = isset($this->params[0]) ? intval($this->params[0]) : 0;
         $current_page = isset($this->params[1]) ? intval($this->params[1]) : 1;
         $order_by = isset($this->params[2]) ? $this->params[2] : 'id';
         $direction = isset($this->params[3]) ? $this->params[3] : 'ASC';
-        $search = isset($this->params[4]) ? $this->params[4]: '';
+        $search = isset($this->params[4]) ? $this->params[4] : '';
         if ($search != '') {
             $where = " b.title LIKE '%$search%' OR bc.title LIKE '%$search%'";
         } else {
@@ -218,4 +222,23 @@ class Region extends Admin {
         View::set_action_var('current_page', $current_page);
         View::set_action_var('num_of_pages', $num_of_pages);
     }
+
+    /**
+     * ajax
+     */
+    public function change_region_status() {
+        //App_Test::objectLog('pp_product',$_POST, __FILE__, __LINE__, __CLASS__, __METHOD__);
+        $changed = false;
+        $region_id = isset($_POST['region_id']) ? intval($_POST['region_id']) : 0;
+        $status = isset($_POST['status']) ? intval($_POST['status']) : 0;
+        if ($suburb_id > 0 AND ($status == '1' OR $status == '0')) {
+            if (Transaction_Region::change_status($region_id, $status)) {
+                $changed = true;
+            }
+        }
+        View::do_not_use_template(); //ajax
+        View::set_view_file($this->view_path . 'change_status.php');
+        View::set_action_var('changed', $changed);
+    }
+
 }

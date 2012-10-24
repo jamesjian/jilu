@@ -9,7 +9,7 @@ use \Zx\Model\Mysql;
 create table book (
 id int(11) auto_increment primary key, 
 author_id int(11) default 0,
-title varchar(255) default '', keywords varchar(255) default '', 
+name varchar(255) default '', keywords varchar(255) default '', 
 abstract text, 
 image varchar(255) default '',
 character_id int(11) default 0,
@@ -22,7 +22,7 @@ comment_status tinyint(1) default 0 comment '1. enable comment, 0. disable comme
 
 class Book {
 
-    public static $fields = array('id', 'author_id', 'title', 'abstract',
+    public static $fields = array('id', 'author_id', 'name', 'abstract',
         'image', 'character_id', 'character_relationship', 
         'date_created', 'status', 'comment_status',
         );

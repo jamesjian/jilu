@@ -114,6 +114,62 @@ mem = {
         });   
         return false;
     }, 
+/**
+     * when province changed, city options will be changed
+     */
+    get_city_options_by_province_id: function(){
+        var province_id = $(this).val();
+        var url = HTMLROOT + 'front//get_city_options_by_province_id/' + province_id;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {},
+            dataType:  'html',
+            success: function(data){
+                city_id = '#city_id';
+                $(city_id).html(data);
+            }
+        });
+    
+    },    
+/**
+     * when city changed, district options will be changed
+     */    
+    get_district_options_by_city_id: function(){
+        var city_id = $(this).val();
+        var url = HTMLROOT + 'front/region/get_district_options_by_city_id/' + city_id;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {},
+            dataType:  'html',
+            success: function(data){
+                district_id = '#district_id';
+                $(district_id).html(data);
+            }
+        });
+    
+    },    
+    /**
+     * when province_id changed, city  and district options will be changed 
+     */
+    get_city_and_district_options_by_province_id: function(){
+        var province_id = $(this).val();
+        var url = HTMLROOT + 'front/region/get_city_and_district_options_by_province_id/' + province_id;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {},
+            dataType:  'json',
+            success: function(data){
+                city_id = '#city_id';
+                district_id = '#district_id';
+                $(city_id).html(data.city_options);
+                $(district_id).html(data.district_options);
+            }
+        });
+    
+    },        
     /**
      * initialize all show event handlers
      */
@@ -182,6 +238,8 @@ mem = {
         mem.init_view_links();
         //mem.init_clear_image_links();	  
         mem.init_delete_links();	  
+        $('#province_id').bind('change', index.get_city_and_district_options_by_province_id);   
+        $('#city_id').bind('change', index.get_district_options_by_city_id);   
     },
     unbind_events: function(){
         

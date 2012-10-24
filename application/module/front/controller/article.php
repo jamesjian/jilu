@@ -2,7 +2,6 @@
 
 namespace App\Module\Front\Controller;
 
-use \Zx\Controller\Route;
 use \Zx\View\View;
 use App\Transaction\Html as Transaction_Html;
 use \App\Model\Article as Model_Article;

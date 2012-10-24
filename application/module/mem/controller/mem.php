@@ -10,13 +10,14 @@ namespace App\Module\Mem\Controller;
 use \Zx\Controller\Route;
 use \Zx\View\View;
 use \App\Transaction\User as Transaction_User;
+use \App\Model\User as Model_User;
 
 class Mem {
 
     public $template_path;
     public $view_path = '';
     public $params = array();
-    public $user_id = 0;
+    public $user = null;
 
     public function init() {
         $this->params = Route::get_params();
@@ -29,7 +30,7 @@ class Mem {
             
         } else {
             if (Transaction_User::user_has_loggedin()) {
-                $this->user_id = Transaction_User::get_user_id();
+                $this->user = Model_User::get_one(Transaction_User::get_user_id());
             } else {
                 header('Location: ' . HTML_ROOT . 'front/user/login');  
             }
