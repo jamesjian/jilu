@@ -13,7 +13,6 @@ namespace App\Model\Base;
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
  *
  * time use unix timestamp(integer), not datetime
- *
  */
 //in case 'empty' or 'false' is the value of the cache, use NO_CACHE_DATA as the value
 //when there is no value for a particular cache id
